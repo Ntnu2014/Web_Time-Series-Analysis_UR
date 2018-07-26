@@ -1,0 +1,62 @@
+---
+title: "Hello R Markdown"
+author: "Frida Gomam"
+date: '2015-07-23T21:13:14-05:00'
+output:
+  rmarkdown::html_document:
+    theme: "united"
+---
+
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p><strong>PROJECT DEFINITION:</strong> Weekly initial claims for unemployment in the US and google search data.</p>
+<p><strong>OBJECTIVE:</strong> The objective is to predict the rate of weekly initial claims for unemployment by google search keywords.</p>
+<p><strong>METHODOLOGY:</strong> For this project I used Bayesian structural time series to TOFIT THE MODEL. structural time series models WAS USED to show how Google search data can be used to improve short term forecasts of economic time series.</p>
+<p>**<a href="DATA:**" class="uri">DATA:**</a> The federal reserve economic data set was obtained from economic research division of <a href="https://fred.stlouisfed.org">Federal Reserve Bank of St Louis</a>. The data consist of the weekly initial claims for unemployment insurance in the US, as reported by the US Federal Reserve. For economic decisions based on these and similar numbers, it would help to have an early forecast of the current week’s number as of the close of the week.</p>
+<p><strong>ANALYSIS:</strong> Bayesian structural time series METHOD WAS USED to fit time series models. Structural time series models are useful because they are flexible and modular. For economic decisions based on these and similar numbers, it would help to have an early forecast of the current week’s number as of the close of the week.</p>
+<p><strong>METHODOLOGY:</strong> The data was divided in to two parts (train, test). In the first model (Model 1), I tried to fit a bsts model with just the trend and seasonal components on the weekly claims without other components. Subsequently, I used to predict method to predict future the next 52 time points. After that, test data was used for validation of the prediction. Finally, regression components (michigan unemployment, military bah, pennsylvania unemployment, unemployment offices, unemployment filing, pay chart) were added to the model to observe whether Google search data to improve the forecast.</p>
+</div>
+<div id="data-sources" class="section level1">
+<h1>Data sources</h1>
+<p>Description etc…</p>
+<p>Let’s take a look:</p>
+<pre class="r"><code>library(readxl)
+library(dplyr)
+iclaims &lt;- read_excel(&quot;C:/Users/MFY/Desktop/data inc project/Bayesian Structured Time Series Data.xlsx&quot;,sheet = &quot;Train&quot;)
+glimpse(iclaims)</code></pre>
+<pre><code>## Observations: 207
+## Variables: 8
+## $ WeekEndingSaturday        &lt;dttm&gt; 2013-07-27, 2013-08-03, 2013-08-10,...
+## $ ICNSA                     &lt;dbl&gt; 281692, 288861, 282756, 281164, 2798...
+## $ pay_chart                 &lt;dbl&gt; 60, 72, 68, 62, 57, 58, 54, 55, 56, ...
+## $ michigan_unemployment     &lt;dbl&gt; 15, 14, 14, 15, 13, 11, 12, 13, 11, ...
+## $ military_bah              &lt;dbl&gt; 10, 13, 12, 11, 8, 9, 7, 8, 7, 8, 8,...
+## $ pennsylvania_unemployment &lt;dbl&gt; 7, 6, 6, 7, 5, 5, 7, 5, 3, 4, 8, 7, ...
+## $ unemployment_offices      &lt;dbl&gt; 2, 2, 2, 2, 2, 2, 1, 2, 2, 1, 4, 4, ...
+## $ unemployment_filing       &lt;dbl&gt; 65, 58, 54, 44, 55, 45, 57, 51, 49, ...</code></pre>
+</div>
+<div id="models" class="section level1">
+<h1>Models</h1>
+<div id="model-1" class="section level2">
+<h2>Model 1</h2>
+<p>Text about model 1</p>
+<pre class="r"><code>library(&quot;bsts&quot;)
+data(iclaims)
+ss &lt;- AddLocalLinearTrend(list(), iclaims$ICNSA)
+ss &lt;- AddSeasonal(ss, iclaims$ICNSA, nseasons = 52)
+model1 &lt;- bsts(iclaims$ICNSA, state.specification = ss, niter = 1000)
+plot(model1)</code></pre>
+<p><img src="/project/index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>Lets also see its trend and seasonality!s</p>
+<pre class="r"><code>plot(model1, &quot;components&quot;)</code></pre>
+<p><img src="/project/index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+</div>
+<div id="model-2" class="section level2">
+<h2>Model 2</h2>
+</div>
+</div>
+<div id="conclusion" class="section level1">
+<h1>Conclusion</h1>
+</div>

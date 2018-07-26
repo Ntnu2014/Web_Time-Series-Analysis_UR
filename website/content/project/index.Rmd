@@ -1,0 +1,64 @@
+---
+title: "Hello R Markdown"
+author: "Frida Gomam"
+date: '2015-07-23T21:13:14-05:00'
+output:
+  rmarkdown::html_document:
+    theme: "united"
+---
+
+
+# Introduction 
+
+**PROJECT DEFINITION:** Weekly initial claims for unemployment in the US and google search data.
+
+**OBJECTIVE:** The objective is to predict the rate of weekly initial claims for unemployment by google search keywords.
+
+**METHODOLOGY:** For this project I used Bayesian structural time series to TOFIT THE MODEL. structural time series models WAS USED to show how Google search data can be used to improve short term forecasts of economic time series.
+
+**DATA:** The federal reserve economic data set was obtained from economic research division of [Federal Reserve Bank of St Louis](https://fred.stlouisfed.org). 
+The data consist of the weekly initial claims for unemployment insurance in the US, as reported by the US Federal Reserve. For economic decisions based on these and similar numbers, it would help to have an early forecast of the current week's number as of the close of the week. 
+
+**ANALYSIS:** Bayesian structural time series METHOD WAS USED to fit time series models. Structural time series models are useful because they are flexible and modular.
+For economic decisions based on these and similar numbers, it would help to have an early forecast of the current week's number as of the close of the week.
+
+**METHODOLOGY:** The data was divided in to two parts (train, test). In the first model (Model 1), I tried to fit a bsts model with just the trend and seasonal components on the weekly claims without other components. Subsequently, I used to predict method to predict future the next 52 time points. 
+After that, test data was used for validation of the prediction. Finally, regression components (michigan unemployment, military bah, pennsylvania unemployment, unemployment offices, unemployment filing, pay chart) were added to the model to observe whether Google search data to improve the forecast.
+
+
+# Data sources
+
+Description etc...
+
+Let's take a look:
+```{r, echo = TRUE, warning = FALSE, message = FALSE}
+library(readxl)
+library(dplyr)
+iclaims <- read_excel("C:/Users/MFY/Desktop/data inc project/Bayesian Structured Time Series Data.xlsx",sheet = "Train")
+glimpse(iclaims)
+```
+
+# Models
+
+## Model 1
+
+Text about model 1
+```{r, echo = TRUE, warning = FALSE, message = FALSE, results = 'hide'}
+library("bsts")
+data(iclaims)
+ss <- AddLocalLinearTrend(list(), iclaims$ICNSA)
+ss <- AddSeasonal(ss, iclaims$ICNSA, nseasons = 52)
+model1 <- bsts(iclaims$ICNSA, state.specification = ss, niter = 1000)
+plot(model1)
+
+```
+
+Lets also see its trend and seasonality!s
+
+```{r, echo = TRUE, warning = FALSE, message = FALSE, results = 'hide'}
+plot(model1, "components")
+```
+
+## Model 2
+
+# Conclusion
