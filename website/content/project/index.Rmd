@@ -34,7 +34,8 @@ Let's take a look:
 ```{r, echo = TRUE, warning = FALSE, message = FALSE}
 library(readxl)
 library(dplyr)
-iclaims <- read_excel("C:/Users/MFY/Desktop/data inc project/Bayesian Structured Time Series Data.xlsx",sheet = "Train")
+iclaims <- 
+  read_excel("../data/all.xlsx",sheet = "Train")
 glimpse(iclaims)
 ```
 
@@ -53,12 +54,14 @@ plot(model1)
 
 ```
 
-Lets also see its trend and seasonality!s
+Lets also see its trend and seasonality!
 
-```{r, echo = TRUE, warning = FALSE, message = FALSE, results = 'hide'}
+
+```{r, fig.cap='Trends and seasonality.', echo = TRUE, warning = FALSE, message = FALSE, results = 'hide', tidy=FALSE}
 plot(model1, "components")
 ```
 
 ## Model 2
+
 
 # Conclusion

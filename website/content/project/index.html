@@ -24,7 +24,8 @@ output:
 <p>Let’s take a look:</p>
 <pre class="r"><code>library(readxl)
 library(dplyr)
-iclaims &lt;- read_excel(&quot;C:/Users/MFY/Desktop/data inc project/Bayesian Structured Time Series Data.xlsx&quot;,sheet = &quot;Train&quot;)
+iclaims &lt;- 
+  read_excel(&quot;../data/all.xlsx&quot;,sheet = &quot;Train&quot;)
 glimpse(iclaims)</code></pre>
 <pre><code>## Observations: 207
 ## Variables: 8
@@ -49,9 +50,14 @@ ss &lt;- AddSeasonal(ss, iclaims$ICNSA, nseasons = 52)
 model1 &lt;- bsts(iclaims$ICNSA, state.specification = ss, niter = 1000)
 plot(model1)</code></pre>
 <p><img src="/project/index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
-<p>Lets also see its trend and seasonality!s</p>
+<p>Lets also see its trend and seasonality!</p>
 <pre class="r"><code>plot(model1, &quot;components&quot;)</code></pre>
-<p><img src="/project/index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<div class="figure"><span id="fig:unnamed-chunk-3"></span>
+<img src="/project/index_files/figure-html/unnamed-chunk-3-1.png" alt="Trends and seasonality." width="672" />
+<p class="caption">
+Figure 1: Trends and seasonality.
+</p>
+</div>
 </div>
 <div id="model-2" class="section level2">
 <h2>Model 2</h2>

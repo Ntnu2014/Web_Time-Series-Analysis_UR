@@ -40,15 +40,20 @@ enableEmoji = true
     weight = 3
     url = "https://www.linkedin.com/in/mehmet-fatih-yasar-222a7b13a/"
 
+
 [[menu.main]]
-    name = "PDF"
+    name = "About |"
     weight = 1
-    url = "/document.pdf"
-[[menu.main]]
-    name = "About"
-    weight = 3
     url = "/about/"
 [[menu.main]]
-    name = "  | Project  | "
+    name = " Project |"
     weight = 2
     url  = "/project/"
+[[menu.main]]
+    name = " Data |"
+    weight = 3
+    url  = "/data/all.xlsx"
+[[menu.main]]
+    name = " PDF"
+    weight = 4
+    url = "/document.pdf"
