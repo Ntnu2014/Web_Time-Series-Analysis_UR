@@ -19,7 +19,7 @@ enableEmoji = true
     author = "Mehmet Fatih Yasar"
     description = "Data Incubator Project Web Site"
     keywords = "project,developer,data"
-    info = "Greatest Candidate Ever :)"
+    info = "A good FELLOW ;)"
 
     hideCredits = false
     hideCopyright = false
@@ -46,7 +46,7 @@ enableEmoji = true
     weight = 1
     url = "/about/"
 [[menu.main]]
-    name = " Project |"
+    name = " Project Steps |"
     weight = 2
     url  = "/project/"
 [[menu.main]]
@@ -54,6 +54,6 @@ enableEmoji = true
     weight = 3
     url  = "/data/all.xlsx"
 [[menu.main]]
-    name = " PDF"
+    name = " Infographic"
     weight = 4
     url = "/document.pdf"

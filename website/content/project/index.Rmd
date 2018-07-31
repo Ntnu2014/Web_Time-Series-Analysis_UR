@@ -1,6 +1,6 @@
 ---
-title: "Hello R Markdown"
-author: "Frida Gomam"
+title: "Data Incubator Project"
+author: "Mehmet F. Yasar"
 date: '2015-07-23T21:13:14-05:00'
 output:
   rmarkdown::html_document:
@@ -10,27 +10,36 @@ output:
 
 # Introduction 
 
-**PROJECT DEFINITION:** Weekly initial claims for unemployment in the US and google search data.
+**Project Definition**
 
-**OBJECTIVE:** The objective is to predict the rate of weekly initial claims for unemployment by google search keywords.
+Weekly initial claims for unemployment in the US and google search data.
 
-**METHODOLOGY:** For this project I used Bayesian structural time series to TOFIT THE MODEL. structural time series models WAS USED to show how Google search data can be used to improve short term forecasts of economic time series.
+**Objective**
 
-**DATA:** The federal reserve economic data set was obtained from economic research division of [Federal Reserve Bank of St Louis](https://fred.stlouisfed.org). 
-The data consist of the weekly initial claims for unemployment insurance in the US, as reported by the US Federal Reserve. For economic decisions based on these and similar numbers, it would help to have an early forecast of the current week's number as of the close of the week. 
+The objective is to predict the rate of weekly initial claims for unemployment by google search keywords. In this project, it was aimed to examine how google data search can be used to improve short term forecasts.
 
-**ANALYSIS:** Bayesian structural time series METHOD WAS USED to fit time series models. Structural time series models are useful because they are flexible and modular.
-For economic decisions based on these and similar numbers, it would help to have an early forecast of the current week's number as of the close of the week.
+**Data**
 
-**METHODOLOGY:** The data was divided in to two parts (train, test). In the first model (Model 1), I tried to fit a bsts model with just the trend and seasonal components on the weekly claims without other components. Subsequently, I used to predict method to predict future the next 52 time points. 
-After that, test data was used for validation of the prediction. Finally, regression components (michigan unemployment, military bah, pennsylvania unemployment, unemployment offices, unemployment filing, pay chart) were added to the model to observe whether Google search data to improve the forecast.
+The federal reserve economic data set was obtained from economic research division of {Federal Reserve Bank of St Louis}, (Link: https://fred.stlouisfed.org.) The data consist of the weekly initial claims for unemployment insurance in the US, as reported by the US Federal Reserve. For economic decisions based on these and similar numbers, it would help to have an early forecast of the current week's number as of the close of the week. 
+
+**Methodology**
+
+For this project I used Bayesian structural time series to fit the model. 
+
+**Analysis**
+
+Bayesian structural time series method was used to fit time series models. structural time series model was used to show how Google search data can be used to improve short term forecasts of economic time series. Structural time series models are useful because they are flexible and modular. For economic decisions based on these and similar numbers, it would help to have an early forecast of the current week's number as of the close of the week.
+
+The data was divided in to two parts (train, test). In the first model (Model 1), I tried to fit a bsts model with just the trend and seasonal components on the weekly claims without other components. Subsequently, I used to predict method to predict future the next 52 time points. After that, test data was used for validation of the prediction. 
+
+Finally, regression components (michigan unemployment, military bah, pennsylvania unemployment, unemployment offices, unemployment filing, pay chart) were added to the model to observe whether Google search data to improve the forecast.
 
 
 # Data sources
 
-Description etc...
+In this part, the data was seperated in to two parts (Training and Testing). Separating data into training and testing sets is an important part of evaluating data mining models. Typically, when you separate a data set into a training set and testing set, most of the data is used for training, and a smaller portion of the data is used for testing
 
-Let's take a look:
+Let's take a look at to the training data:
 ```{r, echo = TRUE, warning = FALSE, message = FALSE}
 library(readxl)
 library(dplyr)
@@ -43,7 +52,8 @@ glimpse(iclaims)
 
 ## Model 1
 
-Text about model 1
+The data was modelled using structural time series.
+
 ```{r, echo = TRUE, warning = FALSE, message = FALSE, results = 'hide'}
 library("bsts")
 data(iclaims)
@@ -54,14 +64,90 @@ plot(model1)
 
 ```
 
-Lets also see its trend and seasonality!
+Figure 1: Distribution of train data
 
+
+*Trend and seasonality*
+
+Lets also see its trend and seasonality!
 
 ```{r, fig.cap='Trends and seasonality.', echo = TRUE, warning = FALSE, message = FALSE, results = 'hide', tidy=FALSE}
 plot(model1, "components")
 ```
 
+Figure 2:  Trend and seasonality.
+
+*Prediction*
+
+```{r, fig.cap='Predictive distribution for the next 52 weeks of initial claims.', echo = TRUE, warning = FALSE, message = FALSE, results = 'hide', tidy=FALSE}
+pred1 <- predict(model1, horizon = 52)
+plot(pred1, plot.original = 156)
+```
+
+
+Figure 3:  Predictive distribution for the next 52 weeks of initial claims.
+
 ## Model 2
+
+```{r, echo = TRUE, warning = FALSE, message = FALSE, results = 'hide'}
+library("bsts")
+data(iclaims)
+ss <- AddLocalLinearTrend(list(), iclaims$ICNSA)
+ss <- AddSeasonal(ss, iclaims$ICNSA, nseasons = 52)
+model2 <- bsts(ICNSA ~ .,
+               state.specification = ss,
+               niter = 1000,
+               data = iclaims)
+```
+
+```{r, echo = TRUE, warning = FALSE, message = FALSE, results = 'hide'}
+plot(model2)
+```
+
+Figure 4:  Distribution of the data with regression components
+
+
+```{r, echo = TRUE, warning = FALSE, message = FALSE, results = 'hide'}
+plot(model2,"comp")
+
+```
+
+Figure 5:  Contribution of each state component to the initial claims data, assuming a regression component with default prior. Compare to Figure 2. 
+
+
+```{r, echo = TRUE, warning = FALSE, message = FALSE, results = 'hide'}
+library(readxl)
+iclaimstest <- read_excel("C:/Users/MFY/Desktop/data inc project/Bayesian Structured Time Series Data.xlsx",
+                           sheet = "Test")
+View(iclaimstest)
+newdata<-iclaimstest
+pred2 <- predict(model2,
+                 newdata=newdata)
+```
+
+
+```{r, echo = TRUE, warning = FALSE, message = FALSE, results = 'hide'}
+plot(model2)
+```
+
+Figure 6:  Distribution of test data
+
+```{r, echo = TRUE, warning = FALSE, message = FALSE, results = 'hide'}
+plot(pred2,
+     plot.original=156)
+```
+
+Figure 7:  Predictive distribution for the next 52 weeks of initial claims with regression coefficient.
+
+```{r, echo = TRUE, warning = FALSE, message = FALSE, results = 'hide'}
+plot(model2, "coef")
+```
+
+Figure 8:  Inclusion probabilities for predictors in the "initial claims" 
+In Figure 8. The search term "michigan_unemployment" shows up with high probability in model
 
 
 # Conclusion
+
+The comparison of the two-model with the actual values revealed that, there is an improvement in the model accuracy. For the model1 the mean absolute percentage errors (MAPE) scores were found 9.5%. Subsequently, MAPE2 scores for model2 was 5.7%. As a result, there was 3.8% difference between the two models (model1 and model2) This result indicates 40% percent improvement in model2.
+

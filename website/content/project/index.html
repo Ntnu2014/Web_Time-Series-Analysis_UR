@@ -1,6 +1,6 @@
 ---
-title: "Hello R Markdown"
-author: "Frida Gomam"
+title: "Data Incubator Project"
+author: "Mehmet F. Yasar"
 date: '2015-07-23T21:13:14-05:00'
 output:
   rmarkdown::html_document:
@@ -11,17 +11,23 @@ output:
 
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
-<p><strong>PROJECT DEFINITION:</strong> Weekly initial claims for unemployment in the US and google search data.</p>
-<p><strong>OBJECTIVE:</strong> The objective is to predict the rate of weekly initial claims for unemployment by google search keywords.</p>
-<p><strong>METHODOLOGY:</strong> For this project I used Bayesian structural time series to TOFIT THE MODEL. structural time series models WAS USED to show how Google search data can be used to improve short term forecasts of economic time series.</p>
-<p>**<a href="DATA:**" class="uri">DATA:**</a> The federal reserve economic data set was obtained from economic research division of <a href="https://fred.stlouisfed.org">Federal Reserve Bank of St Louis</a>. The data consist of the weekly initial claims for unemployment insurance in the US, as reported by the US Federal Reserve. For economic decisions based on these and similar numbers, it would help to have an early forecast of the current week’s number as of the close of the week.</p>
-<p><strong>ANALYSIS:</strong> Bayesian structural time series METHOD WAS USED to fit time series models. Structural time series models are useful because they are flexible and modular. For economic decisions based on these and similar numbers, it would help to have an early forecast of the current week’s number as of the close of the week.</p>
-<p><strong>METHODOLOGY:</strong> The data was divided in to two parts (train, test). In the first model (Model 1), I tried to fit a bsts model with just the trend and seasonal components on the weekly claims without other components. Subsequently, I used to predict method to predict future the next 52 time points. After that, test data was used for validation of the prediction. Finally, regression components (michigan unemployment, military bah, pennsylvania unemployment, unemployment offices, unemployment filing, pay chart) were added to the model to observe whether Google search data to improve the forecast.</p>
+<p><strong>Project Definition</strong></p>
+<p>Weekly initial claims for unemployment in the US and google search data.</p>
+<p><strong>Objective</strong></p>
+<p>The objective is to predict the rate of weekly initial claims for unemployment by google search keywords. In this project, it was aimed to examine how google data search can be used to improve short term forecasts.</p>
+<p><strong>Data</strong></p>
+<p>The federal reserve economic data set was obtained from economic research division of {Federal Reserve Bank of St Louis}, (Link: <a href="https://fred.stlouisfed.org" class="uri">https://fred.stlouisfed.org</a>.) The data consist of the weekly initial claims for unemployment insurance in the US, as reported by the US Federal Reserve. For economic decisions based on these and similar numbers, it would help to have an early forecast of the current week’s number as of the close of the week.</p>
+<p><strong>Methodology</strong></p>
+<p>For this project I used Bayesian structural time series to fit the model.</p>
+<p><strong>Analysis</strong></p>
+<p>Bayesian structural time series method was used to fit time series models. structural time series model was used to show how Google search data can be used to improve short term forecasts of economic time series. Structural time series models are useful because they are flexible and modular. For economic decisions based on these and similar numbers, it would help to have an early forecast of the current week’s number as of the close of the week.</p>
+<p>The data was divided in to two parts (train, test). In the first model (Model 1), I tried to fit a bsts model with just the trend and seasonal components on the weekly claims without other components. Subsequently, I used to predict method to predict future the next 52 time points. After that, test data was used for validation of the prediction.</p>
+<p>Finally, regression components (michigan unemployment, military bah, pennsylvania unemployment, unemployment offices, unemployment filing, pay chart) were added to the model to observe whether Google search data to improve the forecast.</p>
 </div>
 <div id="data-sources" class="section level1">
 <h1>Data sources</h1>
-<p>Description etc…</p>
-<p>Let’s take a look:</p>
+<p>In this part, the data was seperated in to two parts (Training and Testing). Separating data into training and testing sets is an important part of evaluating data mining models. Typically, when you separate a data set into a training set and testing set, most of the data is used for training, and a smaller portion of the data is used for testing</p>
+<p>Let’s take a look at to the training data:</p>
 <pre class="r"><code>library(readxl)
 library(dplyr)
 iclaims &lt;- 
@@ -42,7 +48,7 @@ glimpse(iclaims)</code></pre>
 <h1>Models</h1>
 <div id="model-1" class="section level2">
 <h2>Model 1</h2>
-<p>Text about model 1</p>
+<p>The data was modelled using structural time series.</p>
 <pre class="r"><code>library(&quot;bsts&quot;)
 data(iclaims)
 ss &lt;- AddLocalLinearTrend(list(), iclaims$ICNSA)
@@ -50,6 +56,8 @@ ss &lt;- AddSeasonal(ss, iclaims$ICNSA, nseasons = 52)
 model1 &lt;- bsts(iclaims$ICNSA, state.specification = ss, niter = 1000)
 plot(model1)</code></pre>
 <p><img src="/project/index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>Figure 1: Distribution of train data</p>
+<p><em>Trend and seasonality</em></p>
 <p>Lets also see its trend and seasonality!</p>
 <pre class="r"><code>plot(model1, &quot;components&quot;)</code></pre>
 <div class="figure"><span id="fig:unnamed-chunk-3"></span>
@@ -58,11 +66,54 @@ plot(model1)</code></pre>
 Figure 1: Trends and seasonality.
 </p>
 </div>
+<p>Figure 2: Trend and seasonality.</p>
+<p><em>Prediction</em></p>
+<pre class="r"><code>pred1 &lt;- predict(model1, horizon = 52)
+plot(pred1, plot.original = 156)</code></pre>
+<div class="figure"><span id="fig:unnamed-chunk-4"></span>
+<img src="/project/index_files/figure-html/unnamed-chunk-4-1.png" alt="Predictive distribution for the next 52 weeks of initial claims." width="672" />
+<p class="caption">
+Figure 2: Predictive distribution for the next 52 weeks of initial claims.
+</p>
+</div>
+<p>Figure 3: Predictive distribution for the next 52 weeks of initial claims.</p>
 </div>
 <div id="model-2" class="section level2">
 <h2>Model 2</h2>
+<pre class="r"><code>library(&quot;bsts&quot;)
+data(iclaims)
+ss &lt;- AddLocalLinearTrend(list(), iclaims$ICNSA)
+ss &lt;- AddSeasonal(ss, iclaims$ICNSA, nseasons = 52)
+model2 &lt;- bsts(ICNSA ~ .,
+               state.specification = ss,
+               niter = 1000,
+               data = iclaims)</code></pre>
+<pre class="r"><code>plot(model2)</code></pre>
+<p><img src="/project/index_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>Figure 4: Distribution of the data with regression components</p>
+<pre class="r"><code>plot(model2,&quot;comp&quot;)</code></pre>
+<p><img src="/project/index_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>Figure 5: Contribution of each state component to the initial claims data, assuming a regression component with default prior. Compare to Figure 2.</p>
+<pre class="r"><code>library(readxl)
+iclaimstest &lt;- read_excel(&quot;C:/Users/MFY/Desktop/data inc project/Bayesian Structured Time Series Data.xlsx&quot;,
+                           sheet = &quot;Test&quot;)
+View(iclaimstest)
+newdata&lt;-iclaimstest
+pred2 &lt;- predict(model2,
+                 newdata=newdata)</code></pre>
+<pre class="r"><code>plot(model2)</code></pre>
+<p><img src="/project/index_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>Figure 6: Distribution of test data</p>
+<pre class="r"><code>plot(pred2,
+     plot.original=156)</code></pre>
+<p><img src="/project/index_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>Figure 7: Predictive distribution for the next 52 weeks of initial claims with regression coefficient.</p>
+<pre class="r"><code>plot(model2, &quot;coef&quot;)</code></pre>
+<p><img src="/project/index_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>Figure 8: Inclusion probabilities for predictors in the “initial claims” In Figure 8. The search term “michigan_unemployment” shows up with high probability in model</p>
 </div>
 </div>
 <div id="conclusion" class="section level1">
 <h1>Conclusion</h1>
+<p>The comparison of the two-model with the actual values revealed that, there is an improvement in the model accuracy. For the model1 the mean absolute percentage errors (MAPE) scores were found 9.5%. Subsequently, MAPE2 scores for model2 was 5.7%. As a result, there was 3.8% difference between the two models (model1 and model2) This result indicates 40% percent improvement in model2.</p>
 </div>
