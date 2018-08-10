@@ -9,7 +9,7 @@ slug = "about"
 <img src="./img/portrait.jpg" style="width:25%; margin-right: 20px" align="left">
 
 
-My name is Fatih and I will introduce myself here!!!!
+Hello everyone... My name is Fatih and I will introduce myself here!!!!
 
 I live with not only one but [two](./img/portrait.jpg) magnificent kids :children_crossing: in Portland and enjoy my time by hiking and challenging myself with the most interesting scientific problems every day! :fire:
 
